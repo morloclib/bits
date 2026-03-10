@@ -3,8 +3,6 @@ module bits (*)
 import root
 
 
-infixl 8 (<<)
-infixl 8 (>>)
 infixl 7 (.&.)
 infixl 5 (.^.)
 infixl 4 (.|.)
@@ -21,10 +19,10 @@ class Bits a where
   (.^.) a :: a -> a -> a
 
   -- Left shift
-  (<<) a :: a -> Int -> a
+  shiftl a :: a -> Int -> a
 
   -- Right shift (arithmetic)
-  (>>) a :: a -> Int -> a
+  shiftr a :: a -> Int -> a
 
   -- Bitwise NOT (one's complement)
   bnot a :: a -> a
