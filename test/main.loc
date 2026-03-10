@@ -1,0 +1,161 @@
+module bits.test (test)
+
+import bits
+import root
+
+type Py => Int = "int"
+type Py => Str = "str"
+type Py => Bool = "bool"
+type Py => Tuple2 a b = "tuple" a b
+type Py => List a = "list" a
+
+-------------------------------------------------------------------------------
+-- Test suite functions
+
+source Py from "bits-test.py" ("testEqual", "printMsg", "printResult")
+testEqual a
+    :: Str -- description of the test
+    -> a
+    -> a
+    -> (Int, Int) -- total number of tests and total fails
+    -> (Int, Int)
+printMsg a :: Str -> a -> a
+printResult :: (Int, Int) -> (Int, Int)
+
+testGroup
+    :: Str
+    -> ((Int, Int) -> (Int, Int))
+    -> (Int, Int)
+    -> (Int, Int)
+testGroup msg tests = tests . printMsg msg
+
+passed :: (Int, Int) -> Bool
+passed t = 0 == (.0 t)
+
+test = runTests (0,0)
+
+-------------------------------------------------------------------------------
+-- Test suite
+
+runTests :: (Int, Int) -> Bool
+runTests =
+  ( passed
+  . printResult
+  . testGroup "Popcount" testPopcount
+  . testGroup "Flip Bit" testFlipBit
+  . testGroup "Clear Bit" testClearBit
+  . testGroup "Set Bit" testSetBit
+  . testGroup "Test Bit" testTestBit
+  . testGroup "Bitwise NOT" testBnot
+  . testGroup "Right Shift" testRightShift
+  . testGroup "Left Shift" testLeftShift
+  . testGroup "XOR" testXor
+  . testGroup "OR" testOr
+  . testGroup "AND" testAnd
+  )
+
+-------------------------------------------------------------------------------
+-- AND
+
+testAnd :: (Int, Int) -> (Int, Int)
+testAnd =
+  ( testEqual "0xFF .&. 0x0F" (255 .&. 15) 15
+  . testEqual "7 .&. 3" (7 .&. 3) 3
+  . testEqual "0 .&. 255" (0 .&. 255) 0
+  )
+
+-------------------------------------------------------------------------------
+-- OR
+
+testOr :: (Int, Int) -> (Int, Int)
+testOr =
+  ( testEqual "0xF0 .|. 0x0F" (240 .|. 15) 255
+  . testEqual "0 .|. 0" (0 .|. 0) 0
+  . testEqual "5 .|. 3" (5 .|. 3) 7
+  )
+
+-------------------------------------------------------------------------------
+-- XOR
+
+testXor :: (Int, Int) -> (Int, Int)
+testXor =
+  ( testEqual "0xFF .^. 0x0F" (255 .^. 15) 240
+  . testEqual "5 .^. 5" (5 .^. 5) 0
+  . testEqual "5 .^. 3" (5 .^. 3) 6
+  )
+
+-------------------------------------------------------------------------------
+-- Left Shift
+
+testLeftShift :: (Int, Int) -> (Int, Int)
+testLeftShift =
+  ( testEqual "1 << 4" (1 << 4) 16
+  . testEqual "5 << 0" (5 << 0) 5
+  . testEqual "3 << 3" (3 << 3) 24
+  )
+
+-------------------------------------------------------------------------------
+-- Right Shift
+
+testRightShift :: (Int, Int) -> (Int, Int)
+testRightShift =
+  ( testEqual "16 >> 4" (16 >> 4) 1
+  . testEqual "255 >> 4" (255 >> 4) 15
+  . testEqual "1 >> 1" (1 >> 1) 0
+  )
+
+-------------------------------------------------------------------------------
+-- Bitwise NOT
+
+testBnot :: (Int, Int) -> (Int, Int)
+testBnot =
+  ( testEqual "bnot 0" (bnot 0) (0 - 1)
+  . testEqual "bnot -1" (bnot (0 - 1)) 0
+  )
+
+-------------------------------------------------------------------------------
+-- Test Bit
+
+testTestBit :: (Int, Int) -> (Int, Int)
+testTestBit =
+  ( testEqual "testBit 5 0" (testBit 5 0) True
+  . testEqual "testBit 5 1" (testBit 5 1) False
+  . testEqual "testBit 5 2" (testBit 5 2) True
+  )
+
+-------------------------------------------------------------------------------
+-- Set Bit
+
+testSetBit :: (Int, Int) -> (Int, Int)
+testSetBit =
+  ( testEqual "setBit 0 3" (setBit 0 3) 8
+  . testEqual "setBit 5 1" (setBit 5 1) 7
+  )
+
+-------------------------------------------------------------------------------
+-- Clear Bit
+
+testClearBit :: (Int, Int) -> (Int, Int)
+testClearBit =
+  ( testEqual "clearBit 7 1" (clearBit 7 1) 5
+  . testEqual "clearBit 5 0" (clearBit 5 0) 4
+  )
+
+-------------------------------------------------------------------------------
+-- Flip Bit
+
+testFlipBit :: (Int, Int) -> (Int, Int)
+testFlipBit =
+  ( testEqual "flipBit 5 0" (flipBit 5 0) 4
+  . testEqual "flipBit 5 1" (flipBit 5 1) 7
+  )
+
+-------------------------------------------------------------------------------
+-- Popcount
+
+testPopcount :: (Int, Int) -> (Int, Int)
+testPopcount =
+  ( testEqual "popcount 0" (popcount 0) 0
+  . testEqual "popcount 7" (popcount 7) 3
+  . testEqual "popcount 255" (popcount 255) 8
+  )

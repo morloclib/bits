@@ -1,0 +1,46 @@
+module bits (*)
+
+import root
+
+
+infixl 8 (<<)
+infixl 8 (>>)
+infixl 7 (.&.)
+infixl 5 (.^.)
+infixl 4 (.|.)
+
+
+class Bits a where
+  -- Bitwise AND
+  (.&.) a :: a -> a -> a
+
+  -- Bitwise OR
+  (.|.) a :: a -> a -> a
+
+  -- Bitwise XOR
+  (.^.) a :: a -> a -> a
+
+  -- Left shift
+  (<<) a :: a -> Int -> a
+
+  -- Right shift (arithmetic)
+  (>>) a :: a -> Int -> a
+
+  -- Bitwise NOT (one's complement)
+  bnot a :: a -> a
+
+  -- Test whether bit at position is set
+  -- testBit 5 0 == True   (binary 101, bit 0 is set)
+  testBit a :: a -> Int -> Bool
+
+  -- Set bit at position
+  setBit a :: a -> Int -> a
+
+  -- Clear bit at position
+  clearBit a :: a -> Int -> a
+
+  -- Toggle bit at position
+  flipBit a :: a -> Int -> a
+
+  -- Count the number of set bits
+  popcount a :: a -> Int
