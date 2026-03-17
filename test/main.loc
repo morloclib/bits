@@ -13,13 +13,13 @@ type Py => List a = "list" a
 -- Test suite functions
 
 source Py from "bits-test.py" ("testEqual", "printMsg", "printResult")
-testEqual a
+testEqual
     :: Str -- description of the test
     -> a
     -> a
     -> (Int, Int) -- total number of tests and total fails
     -> (Int, Int)
-printMsg a :: Str -> a -> a
+printMsg :: Str -> a -> a
 printResult :: (Int, Int) -> (Int, Int)
 
 testGroup

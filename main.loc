@@ -10,35 +10,35 @@ infixl 4 (.|.)
 
 class Bits a where
   -- Bitwise AND
-  (.&.) a :: a -> a -> a
+  (.&.) :: a -> a -> a
 
   -- Bitwise OR
-  (.|.) a :: a -> a -> a
+  (.|.) :: a -> a -> a
 
   -- Bitwise XOR
-  (.^.) a :: a -> a -> a
+  (.^.) :: a -> a -> a
 
   -- Left shift
-  shiftl a :: a -> Int -> a
+  shiftl :: a -> Int -> a
 
   -- Right shift (arithmetic)
-  shiftr a :: a -> Int -> a
+  shiftr :: a -> Int -> a
 
   -- Bitwise NOT (one's complement)
-  bnot a :: a -> a
+  bnot :: a -> a
 
   -- Test whether bit at position is set
   -- testBit 5 0 == True   (binary 101, bit 0 is set)
-  testBit a :: a -> Int -> Bool
+  testBit :: a -> Int -> Bool
 
   -- Set bit at position
-  setBit a :: a -> Int -> a
+  setBit :: a -> Int -> a
 
   -- Clear bit at position
-  clearBit a :: a -> Int -> a
+  clearBit :: a -> Int -> a
 
   -- Toggle bit at position
-  flipBit a :: a -> Int -> a
+  flipBit :: a -> Int -> a
 
   -- Count the number of set bits
-  popcount a :: a -> Int
+  popcount :: a -> Int
